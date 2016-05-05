@@ -9,7 +9,7 @@ require('colors');
 
 const argv = require('minimist')(process.argv.slice(2), {
   default: {
-    mode: 'single',
+    mode: 'continuous',
     steps: 1,
     colored: false,
     delay: 1000
