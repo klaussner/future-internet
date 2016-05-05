@@ -51,11 +51,26 @@ if ('matrix' in argv) {
 
 const s = new Switch(3);
 
-outputQueues(s, true);
-
-if (argv.mode == 'single') {
+function simulate() {
   _(argv.steps).times(() => s.step());
-  outputQueues(s);
 }
 
-std.close();
+// Run the simulation once or continuously until the user exits
+if (argv.mode == 'single') {
+  simulate();
+  outputQueues(s, true);
+
+  process.exit();
+} else if(argv.mode == 'continuous') {
+  outputQueues(s, true);
+
+  setInterval(function() {
+    simulate();
+    outputQueues(s);
+  }, 1000);
+
+  std.on('SIGINT', () => process.exit());
+} else {
+  console.error('Unknown mode');
+  process.exit(1);
+}
