@@ -26,16 +26,16 @@ const std = readline.createInterface({
 
 const colors = ['green', 'blue', 'yellow'];
 
-function outputQueues(s, firstRun) {
+function outputQueues(swtch, firstRun) {
   let total = 0;
 
   if (! firstRun) {
-    readline.moveCursor(std, 0, -(s.dimension + 1));
+    readline.moveCursor(std, 0, -(swtch.dimension + 1));
   }
 
   // Print all virtual output queues of each input in one line, plus the total
   // number of packets in the input queue
-  _.forEach(s.inputs, function(input) {
+  _.forEach(swtch.inputs, function(input) {
     const queueTotal = input.reduce((prev, cur) => prev + cur, 0);
 
     total += queueTotal;
@@ -86,24 +86,25 @@ if ('traffic' in argv) {
   arrival = argv.arrival;
 }
 
-const s = new Switch(3, arrival);
+// Run the simulation once or continuously until the user exits
+
+const swtch = new Switch(3, arrival);
 
 function simulate() {
-  _(argv.steps).times(() => s.step());
+  _(argv.steps).times(() => swtch.step());
 }
 
-// Run the simulation once or continuously until the user exits
 if (argv.mode == 'single') {
   simulate();
-  outputQueues(s, true);
+  outputQueues(swtch, true);
 
   process.exit();
 } else if(argv.mode == 'continuous') {
-  outputQueues(s, true);
+  outputQueues(swtch, true);
 
   setInterval(function() {
     simulate();
-    outputQueues(s);
+    outputQueues(swtch);
   }, argv.delay);
 
   std.on('SIGINT', () => process.exit());
