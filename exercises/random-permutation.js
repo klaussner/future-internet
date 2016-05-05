@@ -34,7 +34,7 @@ function outputQueues(s, firstRun) {
 
   // Print all virtual output queues of each input in one line, plus the total
   // number of packets in the input queue
-  _.forEachRight(s.inputs, function(input) {
+  _.forEach(s.inputs, function(input) {
     const queueTotal = input.reduce((prev, cur) => prev + cur, 0);
 
     total += queueTotal;
