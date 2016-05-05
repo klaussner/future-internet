@@ -49,6 +49,7 @@ function outputQueues(s, firstRun) {
     std.write(`  (Σ = ${queueTotal})\n`);
   });
 
+  readline.clearLine(std, 0);
   std.write(`Σ = ${total}\n`);
 }
 
