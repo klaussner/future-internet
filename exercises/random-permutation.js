@@ -12,7 +12,8 @@ const argv = require('minimist')(process.argv.slice(2), {
     mode: 'continuous',
     steps: 1,
     colored: false,
-    delay: 1000
+    delay: 1000,
+    arrival: 0.75
   },
   boolean: ['colored']
 });
@@ -50,7 +51,7 @@ if ('matrix' in argv) {
   // TODO: Load traffic matrix
 }
 
-const s = new Switch(3);
+const s = new Switch(3, argv.arrival);
 
 function simulate() {
   _(argv.steps).times(() => s.step());

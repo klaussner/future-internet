@@ -3,9 +3,9 @@
 const _ = require('lodash');
 
 module.exports = class Switch {
-  constructor(dimension) {
+  constructor(dimension, arrival) {
     this.dimension = dimension;
-    this.ρ = 0.75;
+    this.ρ = arrival;
     this.inputs = [];
 
     for (let i = 0; i < dimension; i++) {
