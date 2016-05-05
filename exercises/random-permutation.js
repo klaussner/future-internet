@@ -5,18 +5,23 @@ const Switch = require('../shared/Switch.js');
 
 const _ = require('lodash');
 const readline = require('readline');
+require('colors');
 
 const argv = require('minimist')(process.argv.slice(2), {
   default: {
     mode: 'single',
-    steps: 1
-  }
+    steps: 1,
+    colored: false
+  },
+  boolean: ['colored']
 });
 
 const std = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+
+const colors = ['green', 'blue', 'yellow'];
 
 function outputQueues(s, firstRun) {
   if (! firstRun) {
@@ -31,7 +36,9 @@ function outputQueues(s, firstRun) {
     readline.clearLine(std, 0);
 
     std.write(input.map(function(output, i) {
-      return _.padStart(output, 3);
+      const cell = _.padStart(output, 3);
+
+      return argv.colored ? cell[colors[i % colors.length]] : cell;
     }).join(' '));
 
     std.write(`  (Σ = ${total})\n`);
