@@ -5,7 +5,7 @@ const _ = require('lodash');
 module.exports = class Switch {
   constructor(dimension, arrival) {
     this.dimension = dimension;
-    this.ρ = arrival;
+    this.λ = arrival;
     this.inputs = [];
 
     for (let i = 0; i < dimension; i++) {
@@ -18,20 +18,40 @@ module.exports = class Switch {
   }
 
   step() {
-    // Arrival of one packet with probability ρ at each input port for random
-    // output port (uniformly distributed)
+    // Arrival of one packet at each input port with probability λ/dimension
+    // (for each output port) or λ[input][output] (from traffic matrix)
     for (let i = 0; i < this.dimension; i++) {
-      const arrival = Math.random();
+      let arrival = Math.random();
 
-      if (arrival <= this.ρ) {
-        const input = this.randomPort(), output = this.randomPort();
+      if (_.isArray(this.λ)) {
+        const row = this.λ[i];
+        let output = -1;
 
-        this.inputs[input][output] += 1;
+        for (let j = 0; j < this.dimension; j++) {
+          const p = row[j];
+
+          if (arrival <= p) {
+            output = j;
+            break;
+          } else {
+            arrival -= p;
+          }
+        }
+
+        if (output > -1) {
+          this.inputs[i][output] += 1;
+        }
+      } else {
+        if (arrival <= this.λ) {
+          let output = this.randomPort();
+
+          this.inputs[i][output] += 1;
+        }
       }
     }
 
     // Connect input ports to output ports randomly and serve each output if
-    // there is a packet at its input's VOQ
+    // there is a packet at its input's virtual output queue
     const map = _.shuffle(_.range(this.dimension));
 
     for (let i = 0; i < this.dimension; i++) {

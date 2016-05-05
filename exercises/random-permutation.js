@@ -6,6 +6,7 @@ const Switch = require('../shared/Switch.js');
 const _ = require('lodash');
 const readline = require('readline');
 require('colors');
+const fs = require('fs');
 
 const argv = require('minimist')(process.argv.slice(2), {
   default: {
@@ -53,11 +54,36 @@ function outputQueues(s, firstRun) {
   std.write(`Σ = ${total}\n`);
 }
 
-if ('matrix' in argv) {
-  // TODO: Load traffic matrix
+// Load and validate traffic matrix if specified
+let arrival;
+
+if ('traffic' in argv) {
+  arrival = JSON.parse(fs.readFileSync(argv.traffic, 'utf-8'));
+
+  try {
+    if (arrival.length != 3) throw null;
+
+    for (let i = 0; i < 3; i++) {
+      if (arrival[i].length != 3) throw null;
+
+      let rowSum = 0, colSum = 0;
+
+      for (let j = 0; j < 3; j++) {
+        rowSum += arrival[i][j];
+        colSum += arrival[j][i];
+      }
+
+      if (rowSum > 1 || colSum > 1) throw null;
+    }
+  } catch (e) {
+    console.error('Invalid traffic matrix');
+    process.exit(1);
+  }
+} else {
+  arrival = argv.arrival;
 }
 
-const s = new Switch(3, argv.arrival);
+const s = new Switch(3, arrival);
 
 function simulate() {
   _(argv.steps).times(() => s.step());
