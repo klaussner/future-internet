@@ -11,7 +11,8 @@ const argv = require('minimist')(process.argv.slice(2), {
   default: {
     mode: 'single',
     steps: 1,
-    colored: false
+    colored: false,
+    delay: 1000
   },
   boolean: ['colored']
 });
@@ -67,7 +68,7 @@ if (argv.mode == 'single') {
   setInterval(function() {
     simulate();
     outputQueues(s);
-  }, 1000);
+  }, argv.delay);
 
   std.on('SIGINT', () => process.exit());
 } else {
