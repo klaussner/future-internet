@@ -42,7 +42,10 @@ function outputQueues(s, firstRun) {
     readline.clearLine(std, 0);
 
     std.write(input.map(function(output, i) {
-      const cell = _.padStart(output, 3);
+      const cell = _.truncate(_.padStart(output, 3), {
+        length: 3,
+        omission: '…'
+      });
 
       return argv.colored ? cell[colors[i % colors.length]] : cell;
     }).join(' '));
