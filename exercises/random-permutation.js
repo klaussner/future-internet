@@ -26,15 +26,18 @@ const std = readline.createInterface({
 const colors = ['green', 'blue', 'yellow'];
 
 function outputQueues(s, firstRun) {
+  let total = 0;
+
   if (! firstRun) {
-    readline.moveCursor(std, 0, -s.dimension);
+    readline.moveCursor(std, 0, -(s.dimension + 1));
   }
 
   // Print all virtual output queues of each input in one line, plus the total
   // number of packets in the input queue
   _.forEachRight(s.inputs, function(input) {
-    const total = input.reduce((prev, cur) => prev + cur, 0);
+    const queueTotal = input.reduce((prev, cur) => prev + cur, 0);
 
+    total += queueTotal;
     readline.clearLine(std, 0);
 
     std.write(input.map(function(output, i) {
@@ -43,8 +46,10 @@ function outputQueues(s, firstRun) {
       return argv.colored ? cell[colors[i % colors.length]] : cell;
     }).join(' '));
 
-    std.write(`  (Σ = ${total})\n`);
+    std.write(`  (Σ = ${queueTotal})\n`);
   });
+
+  std.write(`Σ = ${total}\n`);
 }
 
 if ('matrix' in argv) {
