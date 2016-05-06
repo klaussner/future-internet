@@ -13,10 +13,6 @@ module.exports = class Switch {
     }
   }
 
-  randomPort() {
-    return _.random(0, this.dimension - 1);
-  }
-
   step() {
     // Arrival of at most one packet at each input port with probability
     // λ/dimension (uniform) or λ[input][output] (from traffic matrix) for each
@@ -28,12 +24,11 @@ module.exports = class Switch {
         const row = this.λ[i];
         let output = -1;
 
-        for (let j = 0; j < this.dimension; j++) {
+        for (let j = 0; j < this.dimension && output < 0; j++) {
           const p = row[j];
 
           if (arrival <= p) {
             output = j;
-            break;
           } else {
             arrival -= p;
           }
@@ -44,7 +39,7 @@ module.exports = class Switch {
         }
       } else {
         if (arrival <= this.λ) {
-          let output = this.randomPort();
+          const output = _.random(0, this.dimension - 1);
 
           this.inputs[i][output] += 1;
         }

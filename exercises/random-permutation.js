@@ -34,7 +34,7 @@ function outputQueues(swtch, firstRun) {
   }
 
   // Print all virtual output queues of each input in one line, plus the total
-  // number of packets in the input queue
+  // number of packets in each input queue
   _.forEach(swtch.inputs, function(input) {
     const queueTotal = input.reduce((prev, cur) => prev + cur, 0);
 
@@ -61,13 +61,19 @@ function outputQueues(swtch, firstRun) {
 let arrival;
 
 if ('traffic' in argv) {
+  const invalid = 'Invalid traffic matrix';
+
   arrival = JSON.parse(fs.readFileSync(argv.traffic, 'utf-8'));
 
   try {
-    if (arrival.length != 3) throw null;
+    if (arrival.length != 3) {
+      throw invalid;
+    }
 
     for (let i = 0; i < 3; i++) {
-      if (arrival[i].length != 3) throw null;
+      if (arrival[i].length != 3) {
+        throw invalid;
+      }
 
       let rowSum = 0, colSum = 0;
 
@@ -76,17 +82,19 @@ if ('traffic' in argv) {
         colSum += arrival[j][i];
       }
 
-      if (rowSum > 1 || colSum > 1) throw null;
+      if (rowSum > 1 || colSum > 1) {
+        throw invalid;
+      }
     }
   } catch (e) {
-    console.error('Invalid traffic matrix');
+    console.error(e);
     process.exit(1);
   }
 } else {
   arrival = argv.arrival;
 }
 
-// Run the simulation once or continuously until the user exits
+// Run simulation once or continuously until the user exits
 
 const swtch = new Switch(3, arrival);
 
