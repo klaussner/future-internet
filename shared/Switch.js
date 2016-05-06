@@ -18,8 +18,9 @@ module.exports = class Switch {
   }
 
   step() {
-    // Arrival of one packet at each input port with probability λ/dimension
-    // (for each output port) or λ[input][output] (from traffic matrix)
+    // Arrival of at most one packet at each input port with probability
+    // λ/dimension (uniform) or λ[input][output] (from traffic matrix) for each
+    // output port
     for (let i = 0; i < this.dimension; i++) {
       let arrival = Math.random();
 
