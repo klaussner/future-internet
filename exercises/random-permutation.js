@@ -35,6 +35,7 @@ function outputQueues(swtch, firstRun) {
 
   // Print all virtual output queues of each input in one line, plus the total
   // number of packets in each input queue
+
   swtch.inputs.forEach(function(input) {
     const queueTotal = input.reduce((prev, cur) => prev + cur, 0);
 
@@ -58,6 +59,7 @@ function outputQueues(swtch, firstRun) {
 }
 
 // Load and validate traffic matrix if specified
+
 let arrival;
 
 if ('traffic' in argv) {
