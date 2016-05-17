@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const Switch = require('../shared/Switch.js');
+const Switch = require('../imports/Switch.js');
 
 const _ = require('lodash');
 const readline = require('readline');

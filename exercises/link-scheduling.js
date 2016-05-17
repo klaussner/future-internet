@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const strategies = require('../shared/scheduling-strategies.js');
+const strategies = require('../imports/scheduling-strategies.js');
 
 const _ = require('lodash');
 const fs = require('fs');
