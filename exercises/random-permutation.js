@@ -35,7 +35,7 @@ function outputQueues(swtch, firstRun) {
 
   // Print all virtual output queues of each input in one line, plus the total
   // number of packets in each input queue
-  _.forEach(swtch.inputs, function(input) {
+  swtch.inputs.forEach(function(input) {
     const queueTotal = input.reduce((prev, cur) => prev + cur, 0);
 
     total += queueTotal;
