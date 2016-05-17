@@ -51,6 +51,10 @@ standard deviation (per flow and in total).
 % ./link-scheduling.js <trace file> [options]
 ```
 
-`--strategy=gps|rr` (default = `gps`):  
+`--strategy=gps|rr|drr` (default = `gps`):  
 Scheduling algorithm for the simulation. Avaliable algorithms are
-*generalized processor sharing* (`gps`) and *packet-based round robin* (`rr`).
+*generalized processor sharing* (`gps`), *packet-based round robin* (`rr`),
+and *deficit round robin* (`drr`).
+
+`--quantum=<bits>` (default = `200`):  
+Quantum for *deficit round robin* (ignored for all other strategies).

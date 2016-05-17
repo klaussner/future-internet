@@ -8,7 +8,8 @@ const fs = require('fs');
 
 const argv = require('minimist')(process.argv.slice(2), {
   default: {
-    strategy: 'gps'
+    strategy: 'gps',
+    quantum: 200
   }
 });
 
@@ -61,11 +62,13 @@ while (true) {
   }
 
   if (queues.some(q => q.length > 0)) {
+    const strategy = strategies[argv.strategy];
+
     do {
       current = (current + 1) % flowCount;
     } while (queues[current].length == 0);
 
-    µs = strategies[argv.strategy](queues[current], µs, latencies[current]);
+    µs = strategy(queues[current], µs, latencies[current], argv);
   } else if (events.length > 0) {
     µs = events[0].arrival;
   } else {
